@@ -1,26 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace WinForms_Threading.Dialogs.DialogControls
 {
+	/// <summary>
+	/// http://www.codeproject.com/Articles/99143/BackgroundWorker-Class-Sample-for-Beginners
+	/// </summary>
 	public partial class WorkerControl : UserControl, Common.IGenericDialogControl
 	{
+		private TimeSpan m_second = new TimeSpan(0, 0, 1);
 		private BackgroundWorker m_worker;
 		public WorkerControl()
 		{
 			InitializeComponent();
 			m_worker = new BackgroundWorker();
 			//	Wire Events for BackGround Worker
-			m_worker.DoWork += (s, e) => { };
-			m_worker.ProgressChanged += (s, e) => { };
-			m_worker.RunWorkerCompleted += (s, e) => { };
+			m_worker.DoWork += (s, e) => {
+				for(int i = 0; i < 100; i++)
+				{
+					Thread.Sleep(m_second);
+					m_worker.ReportProgress(i);
+					if(m_worker.CancellationPending)
+					{
+						e.Cancel = true;
+						m_worker.ReportProgress(0);
+						return;
+					}
+				}
+			};
+			m_worker.ProgressChanged += (s, e) => {
+				pb_progress.Value = e.ProgressPercentage;
+			};
+			m_worker.RunWorkerCompleted += (s, e) => {
+				if(e.Cancelled)
+				{
+					//	Report the task was Canceled
+				}
+			};
 			m_worker.WorkerReportsProgress = true;
 			m_worker.WorkerSupportsCancellation = true;
         }
@@ -71,6 +89,14 @@ namespace WinForms_Threading.Dialogs.DialogControls
 		{
 			m_worker.RunWorkerAsync();
 
+		}
+
+		private void btn_cancelWorker_Click(object sender, EventArgs e)
+		{
+			m_worker.IsBusy)
+			{
+				m_worker.CancelAsync();
+			}
 		}
 	}
 }
