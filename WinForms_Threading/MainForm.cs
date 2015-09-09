@@ -24,7 +24,13 @@ namespace WinForms_Threading
 
 		private void btn_backgroundWorker_Click(object sender, EventArgs e)
 		{
-
+			using (var dc = new Dialogs.DialogControls.WorkerControl())
+			{
+				using (var dialog = new Dialogs.GenericDialog(dc))
+				{
+					dialog.ShowDialog();
+				}
+			}
 		}
 
 		private void btn_progressTask_Click(object sender, EventArgs e)
@@ -36,5 +42,33 @@ namespace WinForms_Threading
 			}
 		}
 
+		private void btn_blockingTask_Click(object sender, EventArgs e)
+		{
+			ToggleButtons();
+			BlockUI();
+			ToggleButtons();
+		}
+
+		private void BlockUI()
+		{
+			for (int i = 0; i < 20; i++)
+			{
+				System.Threading.Thread.Sleep(1000);
+			}
+		}
+
+		private void ToggleButtons()
+		{
+			foreach (var c in pnl_container.Controls)
+			{
+				var btn = c as Button;
+				if (btn == null)
+				{
+					continue;
+				}
+
+				btn.Enabled = !btn.Enabled;
+			}
+		}
 	}
 }

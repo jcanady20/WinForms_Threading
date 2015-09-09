@@ -13,7 +13,7 @@ namespace WinForms_Threading.Dialogs
 			InitializeComponent();
 		}
 
-		public GenericDialog(Common.IGenericDialogControl dialogControl)
+		public GenericDialog(Common.IGenericDialogControl dialogControl) : this()
 		{
 			this.DialogControl = dialogControl;
 		}
@@ -64,8 +64,16 @@ namespace WinForms_Threading.Dialogs
 		{
 			int h = s.Height - pnl_controlContainer.Size.Height + 50;
 			int w = s.Width - pnl_controlContainer.Size.Width;
-			this.Height += h;
-			this.Width += w;
+			if(w > this.Width)
+			{
+				this.Width += w;
+			}
+			if(h > this.Height)
+			{
+				this.Height += h;
+			}
+			
+			
 		}
 
 		private void btn_cancel_Click(object sender, EventArgs e)

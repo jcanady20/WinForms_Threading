@@ -77,23 +77,34 @@ namespace WinForms_Threading.Dialogs.DialogControls
 
 		public bool AcceptAction()
 		{
-			return true;
+			CancelWorker()
+            return true;
 		}
 
 		public void CloseAction()
 		{
-			return;
+			CancelWorker()
+            return;
 		}
 
 		public void TaskAction()
 		{
+			if(m_worker.IsBusy)
+			{
+				return;
+			}
 			m_worker.RunWorkerAsync();
 
 		}
 
 		private void btn_cancelWorker_Click(object sender, EventArgs e)
 		{
-			m_worker.IsBusy)
+			CancelWorker();
+        }
+
+		private void CancelWorker()
+		{
+			if (m_worker.IsBusy)
 			{
 				m_worker.CancelAsync();
 			}
