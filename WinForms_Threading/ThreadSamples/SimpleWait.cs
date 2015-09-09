@@ -82,7 +82,7 @@ namespace WinForms_Threading.ThreadSamples
 			var onChange = OnNumberOfTasksChanged;
 			if(onChange != null)
 			{
-				onChange(this, new NumberOfTasksEventargs(taskName, numberOfTasks))
+				onChange(this, new NumberOfTasksEventargs(taskName, numberOfTasks));
 			}
 		}
 
